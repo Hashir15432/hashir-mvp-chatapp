@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-2xl font-bold mb-4">Hsshir * MVP-Chat</h3>
+            <h3 className="text-2xl font-bold mb-4">Hashir * MVP-Chat</h3>
             <p className="text-gray-400">
               Connecting people through seamless communication.
             </p>
