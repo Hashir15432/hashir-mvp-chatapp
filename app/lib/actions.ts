@@ -5,23 +5,16 @@ import { StreamChat } from 'stream-chat'
 import { auth } from '@clerk/nextjs/server'
 import { NewConversationFormSchema } from '@/lib/schemas'
 
-// ✅ Use the correct environment variables
 const serverClient = StreamChat.getInstance(
   process.env.NEXT_PUBLIC_STREAM_API_KEY!,
-  process.env.STREAM_SECRET_KEY! // FIXED
+  process.env.STREAM_API_SECRET!
 )
 
-// ✅ Create Stream token (server-side only)
 export async function createToken(userId: string): Promise<string> {
-  if (!process.env.STREAM_SECRET_KEY) {
-    throw new Error('Stream Secret Key is missing in environment variables!')
-  }
-
   return serverClient.createToken(userId)
 }
 
 type NewConversationInputs = z.infer<typeof NewConversationFormSchema>
-
 export async function createNewConversationAction(data: NewConversationInputs) {
   const { userId } = auth()
 
@@ -30,6 +23,7 @@ export async function createNewConversationAction(data: NewConversationInputs) {
   }
 
   const result = NewConversationFormSchema.safeParse(data)
+
   if (result.error) {
     return { error: 'Required data is missing.' }
   }
@@ -43,9 +37,9 @@ export async function createNewConversationAction(data: NewConversationInputs) {
     })
 
     await channel.create()
+
     return { success: true }
   } catch (error: any) {
-    console.error('Stream Error:', error)
     return { error: error.message || 'Error creating the channel.' }
   }
 }
